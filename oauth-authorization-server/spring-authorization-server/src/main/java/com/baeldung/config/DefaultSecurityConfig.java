@@ -17,9 +17,16 @@ public class DefaultSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(authorizeRequests ->
-          authorizeRequests.anyRequest().authenticated()
+          authorizeRequests
+          .antMatchers("/custom-login")
+          .permitAll()
+          .anyRequest().authenticated()
         )
-          .formLogin(withDefaults());
+          //.formLogin(withDefaults())
+          .formLogin(form -> form
+            .loginPage("/custom-login")
+            .loginProcessingUrl("/login"))
+          ;
         return http.build();
     }
 
